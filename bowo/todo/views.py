@@ -7,6 +7,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect
 
+
 # Create your views here.
 
 class HomePageView(TemplateView):
@@ -25,7 +26,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('/')
+            return redirect('Profile')
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
