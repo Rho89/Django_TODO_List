@@ -1,12 +1,71 @@
 {% extends 'base.html' %}
 
+{% load i18n staticfiles %}
+
 {% block body_block %}
 
-<h2>Bienvenue {{ user.get_full_name }} !</h2>
-<ul>
-  <li>Username: {{ user.username }}</li>
-  <li>Location: {{ user.profile.location }}</li>
-  <li>Birth Date: {{ user.profile.birth_date }}</li>
-  </ul>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{% trans 'Todo list' %}</title>
+  </head>
+  
+  <body>
+    
+    <section id="todoapp">
+      <header id="header">
+	<h1>{% trans 'Todos' %}</h1>
+	<form action="{% url 'todo-create' %}" method="post">
+	  {% csrf_token %}
+	  <input id="new-todo" placeholder="{% trans 'What needs to be done?' %}" autofocus>
+	</form>
+      </header>
+      
+      <section id="main">
+	<input id="toggle-all" type="checkbox" >
+	<label for="toggle-all">{% trans 'Mark all as complete' %}</label>
+	<ul id="todo-list">
+	  
+	  {% for todo in object_list %}
+	  <li>
+	    <div class="view">
+	      <input class="toggle" type="checkbox">
+	      <label>{{ todo.content }}</label>
+	      <button class="destroy"></button>
+	    </div>
+	    <input class="edit" value="{{ todo.content }}">
+	  </li>
+	  {% endfor %}
+	  
+	</ul>
+      </section>
+
+
+    <form method="post" action="{% url 'todo-toggle' todo.id %}">
+      {% csrf_token %}
+      <input class="toggle" type="checkbox"{% if todo.is_resolved %} checked="checked"{% endif %} onclick="this.parentNode.submit();">
+      </form>
+
+    
+    <form method="post" action="{% url 'todos-toggle' %}">
+      {% csrf_token %}
+      <input id="toggle-all" type="checkbox" onclick="this.parentNode.submit();">
+    </form>
+
+
+    <form method="post" action="{% url 'todo-delete' todo.id %}">
+      {% csrf_token %}
+      <button class="destroy" onclick="this.parentNode.submit();"></button>
+    </form>    
+    
+    <footer id="footer">
+      <form action="{% url 'todo-clear' %}" method="post">
+	{% csrf_token %}
+	<button id="clear-completed" onclick="this.parentNode.submit();">{% trans 'Clear completed' %}</button>
+      </form>
+    </footer>
+    
+  </body>
+</html>
 
 {% endblock %}
