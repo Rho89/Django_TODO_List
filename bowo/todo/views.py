@@ -62,28 +62,6 @@ def clear_resolved_todos(request):
         Todo.objects.filter(is_resolved=True).delete()
     return HttpResponseRedirect(TODO_LIST_URL)
 
-def toggle_todo(request, todo_id):
-    if request.method == 'POST':
-        # Modify an object in POST only
-        todo = get_object_or_404(Todo, pk=todo_id)
-
-        todo.is_resolved = not todo.is_resolved
-        todo.save()
-
-    return HttpResponseRedirect(TODO_LIST_URL)
-                                    
-def toggle_todos(request, todo_id):
-    if request.method == 'POST':
-        # Modify an object in POST only
-        try:
-            task = Todo.objects.all()[0]
-        except IndexError:
-            task = None
-        if todo is not None:
-            status = not todo.is_resolved
-            Todo.objects.all().update(is_resolved=status)
-    return HttpResponseRedirect(TODO_LIST_URL)
-
 class TodoDeleteView(DeleteView):
     model=Todo
     success_url= TODO_LIST_URL

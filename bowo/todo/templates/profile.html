@@ -39,24 +39,6 @@
 	  
 	</ul>
       </section>
-
-
-    <form method="post" action="{% url 'todo-toggle' todo.id %}">
-      {% csrf_token %}
-      <input class="toggle" type="checkbox"{% if todo.is_resolved %} checked="checked"{% endif %} onclick="this.parentNode.submit();">
-      </form>
-
-    
-    <form method="post" action="{% url 'todos-toggle' %}">
-      {% csrf_token %}
-      <input id="toggle-all" type="checkbox" onclick="this.parentNode.submit();">
-    </form>
-
-
-    <form method="post" action="{% url 'todo-delete' todo.id %}">
-      {% csrf_token %}
-      <button class="destroy" onclick="this.parentNode.submit();"></button>
-    </form>    
     
     <footer id="footer">
       <form action="{% url 'todo-clear' %}" method="post">
